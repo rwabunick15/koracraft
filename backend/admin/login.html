@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="icon" type="image/png" sizes="32x32" href="crop.png?v=2">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>KoraCraft Admin Login</title>
+
+    <link rel="stylesheet" href="login.css">
+
+</head>
+
+<body>
+
+<div class="background-grid"></div>
+
+<div class="login-card">
+
+    <div class="logo-area">
+
+        <h1>KoraCraft</h1>
+
+        <p>Administration Console</p>
+
+    </div>
+
+    <form id="loginForm">
+
+        <div class="input-group">
+
+            <label>Username</label>
+
+            <input
+                type="text"
+                id="username"
+                autocomplete="username"
+                placeholder="Enter username"
+                required
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="password"
+                autocomplete="current-password"
+                placeholder="Enter password"
+                required
+            >
+
+        </div>
+
+        <button
+            type="submit"
+            class="login-btn">
+
+            LOGIN
+
+        </button>
+
+    </form>
+
+    <p id="error" class="error-message"></p>
+
+</div>
+
+<script src="login.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+/* ===========================================
+   KoraCraft Admin Login
+=========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, Arial, sans-serif;
+}
+
+body{
+
+    background:#090909;
+
+    overflow:hidden;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:100vh;
+
+    color:white;
+
+}
+
+/* Background Grid */
+
+.background-grid{
+
+    position:fixed;
+
+    inset:0;
+
+    background-image:
+
+    linear-gradient(rgba(16,185,129,.08) 1px, transparent 1px),
+
+    linear-gradient(90deg, rgba(16,185,129,.08) 1px, transparent 1px);
+
+    background-size:45px 45px;
+
+    z-index:-2;
+
+}
+
+/* Card */
+
+.login-card{
+
+    width:420px;
+
+    padding:45px;
+
+    background:#111111;
+
+    border:1px solid rgba(16,185,129,.35);
+
+    border-radius:14px;
+
+    box-shadow:
+
+        0 0 30px rgba(16,185,129,.08);
+
+    animation:fadeIn .7s ease;
+
+}
+
+/* Logo */
+
+.logo-area{
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+.logo-area h1{
+
+    color:#10b981;
+
+    font-size:2rem;
+
+    letter-spacing:2px;
+
+    margin-bottom:8px;
+
+}
+
+.logo-area p{
+
+    color:#888;
+
+    font-size:.95rem;
+
+}
+
+/* Inputs */
+
+.input-group{
+
+    margin-bottom:22px;
+
+}
+
+.input-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#bdbdbd;
+
+    font-size:.9rem;
+
+}
+
+.input-group input{
+
+    width:100%;
+
+    padding:14px;
+
+    background:#181818;
+
+    color:white;
+
+    border:1px solid #2a2a2a;
+
+    border-radius:8px;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+.input-group input:focus{
+
+    border-color:#10b981;
+
+    box-shadow:0 0 15px rgba(16,185,129,.2);
+
+}
+
+/* Button */
+
+.login-btn{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#10b981;
+
+    color:white;
+
+    font-weight:bold;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.login-btn:hover{
+
+    background:#0ea56d;
+
+    transform:translateY(-2px);
+
+}
+
+/* Error */
+
+.error-message{
+
+    text-align:center;
+
+    color:#ff5c5c;
+
+    margin-top:18px;
+
+    min-height:20px;
+
+    font-size:.9rem;
+
+}
+
+/* Animation */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(25px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}

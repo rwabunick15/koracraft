@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="icon" type="image/png" sizes="32x32" href="crop.png?v=2">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>KoraCraft Admin Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <header>
+
+        <div>
+
+            <h1>KoraCraft</h1>
+
+            <p>Administration Dashboard</p>
+
+        </div>
+
+        <button
+            id="logoutBtn"
+            class="logout-btn">
+
+            Logout
+
+        </button>
+
+    </header>
+
+    <section class="stats">
+
+        <div class="card">
+
+            <h3>Total Requests</h3>
+
+            <h2 id="totalRequests">0</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>New</h3>
+
+            <h2 id="newRequests">0</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Contacted</h3>
+
+            <h2 id="contactedRequests">0</h2>
+
+        </div>
+
+        <div class="card">
+
+            <h3>Completed</h3>
+
+            <h2 id="completedRequests">0</h2>
+
+        </div>
+
+    </section>
+
+    <section class="toolbar">
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by client, email or website..."
+        >
+
+        <select id="statusFilter">
+
+            <option value="All">All Statuses</option>
+
+            <option value="New">New</option>
+
+            <option value="Contacted">Contacted</option>
+
+            <option value="In Progress">In Progress</option>
+
+            <option value="Completed">Completed</option>
+
+            <option value="Cancelled">Cancelled</option>
+
+        </select>
+
+    </section>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>ID</th>
+
+                <th>Client</th>
+
+                <th>Email</th>
+
+                <th>Website</th>
+
+                <th>Status</th>
+
+                <th>Date</th>
+
+                <th>Delete</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody id="requestsTable">
+
+        </tbody>
+
+    </table>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
