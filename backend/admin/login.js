@@ -13,7 +13,7 @@ async function checkSession() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/auth/check",
+            "https://koracraft-backend.onrender.com/api/auth/check",
             {
                 credentials: "include"
             }
@@ -63,7 +63,7 @@ form.addEventListener("submit", async (e) => {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/auth/login",
+            "https://koracraft-backend.onrender.com/api/auth/login",
             {
 
                 method: "POST",

@@ -17,7 +17,7 @@ let requests = [];
 async function checkSession() {
 
     const response = await fetch(
-        "http://localhost:3000/api/auth/check",
+        "https://koracraft-backend.onrender.com/api/auth/check",
         {
             credentials: "include"
         }
@@ -42,7 +42,7 @@ async function loadRequests() {
     try {
 
         const response = await fetch(
-            "http://localhost:3000/api/request",
+            "https://koracraft-backend.onrender.com/api/request",
             {
                 credentials: "include"
             }
@@ -193,7 +193,7 @@ async function deleteRequest(id){
 
     const response = await fetch(
 
-        `http://localhost:3000/api/request/${id}`,
+        `https://koracraft-backend.onrender.com/api/request/${id}`,
 
         {
 
@@ -223,7 +223,7 @@ document
 
     await fetch(
 
-        "http://localhost:3000/api/auth/logout",
+        "https://koracraft-backend.onrender.com/api/auth/logout",
 
         {
 
