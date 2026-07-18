@@ -18,16 +18,18 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 // =====================
 
-app.use(helmet());
-
 app.use(cors({
     origin: [
         "http://127.0.0.1:5500",
         "http://localhost:5500",
-        "https://koracraft.vercel.app/"
+        "https://koracraft.vercel.app"
     ],
-    credentials: true
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+app.use(helmet());
 
 app.use(express.json());
 
