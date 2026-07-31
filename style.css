@@ -58,7 +58,7 @@ body {
 
 .line-1 {
     top: 15%;
-    left: -5%;
+    left: 0%;
     width: 40%;
     height: 200px;
     border-width: 2px 2px 0 0;
@@ -67,7 +67,7 @@ body {
 
 .line-2 {
     bottom: 10%;
-    right: -5%;
+    right: 0%;
     width: 35%;
     height: 250px;
     border-width: 0 0 2px 2px;
@@ -101,142 +101,655 @@ body {
 }
 
 /* ==========================================================================
-   2. FIXED POSITION SYMMETRIC NAVIGATION INTERFACE
+   FIXED NAVIGATION
    ========================================================================== */
+
 nav {
+
     display: flex;
-    justify-content: space-between; /* Pushes logo container left and anchor links right */
-    align-items: center;            /* Centers items vertically on the horizontal line axis */
-    padding: 15px 5%;              /* Clear side-to-side breathing padding screen width boundaries */
+    justify-content: space-between;
+    align-items: center;
+
     position: fixed;
-    width: 100%;
     top: 0;
     left: 0;
-    z-index: 100;
-    background: rgba(11, 5, 3, 0.85);
-    backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(36, 19, 12, 0.5);
-}
 
-/* Tech Trace Line Branding Logo Wrapper */
-.logo-container {
-    position: relative;
-    padding-bottom: 12px;
-    display: flex;
-    align-items: center;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-}
-
-/* Controls height and scaling of the transparent corporate brand asset logo */
-.nav-logo-img {
-    height: 75px; 
-    width: auto;
-    object-fit: contain;
-}
-
-/* Horizontal glowing base line underneath brand image logo */
-.logo-line-horizontal {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
-    height: 0px;
-    border-bottom: 2px solid #10b981;
-    opacity: 0.8;
-}
 
-/* Diagonal trace branch component running off the logo node matrix */
-.logo-line-diagonal {
-    position: absolute;
-    bottom: -10px;
-    right: -10px;
-    width: 15px;
-    height: 10px;
-    border-right: 2px solid #10b981;
-    transform: skewX(-45deg);
-    opacity: 0.6;
-}
+    padding: 14px clamp(20px, 5vw, 80px);
 
-/* Menu Action Link Items Group aligned to the far right screen side edge */
-.nav-links {
-    display: flex;
-    align-items: center;
-}
+    z-index: 1000;
 
-.nav-links a {
-    color: #f7ebe6;
-    text-decoration: none;
-    margin-left: 35px; /* Keeps clear uniform spacing separating your list labels */
-    font-size: 0.95rem;
-    text-transform: capitalize;
-    font-weight: 500;
-    transition: color 0.3s;
-}
+    background: rgba(11, 5, 3, 0.82);
 
-.nav-links a:hover { 
-    color: #10b981; 
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid rgba(36, 19, 12, 0.45);
+
 }
 
 /* ==========================================================================
-   3. HERO PRESENTATION VIEWPORT STAGING AREA
+   LOGO
    ========================================================================== */
-.hero {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+
+.logo-container {
+
     position: relative;
-    padding: 0 20px;
-}
 
-/* Hero Branding Center Image Framework Variant */
-.hero-title-container {
-    max-width: 550px; 
-    width: 90%;
-    margin-bottom: 20px;
-    opacity: 0; /* Animated dynamically by incoming GSAP timeline scripts */
-    transform: translateY(30px);
     display: flex;
-    justify-content: center;
     align-items: center;
+
+    padding-bottom: 12px;
+
 }
 
-.hero-logo-img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-}
+.logo {
 
-.hero-subtitle {
-    font-size: 1.2rem;
-    color: #a59690;
-    margin-bottom: 40px;
-    opacity: 0;
-}
+    display: flex;
+    align-items: center;
 
-.learn-more-btn {
-    opacity: 0;
-    background: #192a25;
-    border: 1px solid #10b981;
-    color: #10b981;
-    padding: 12px 35px;
     text-decoration: none;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    transition: background 0.3s, color 0.3s;
-    display: inline-block;
+
 }
 
-.learn-more-btn:hover {
-    background: #10b981;
-    color: #0b0503;
+/* ==========================================================================
+   LOGO IMAGE
+   ========================================================================== */
+
+.nav-logo-img {
+
+    height: 75px;
+
+    width: auto;
+
+    object-fit: contain;
+
+    transition: transform .3s ease;
+
+}
+
+.logo:hover .nav-logo-img {
+
+    transform: scale(1.05);
+
+}
+
+/* ==========================================================================
+   BRAND DECORATION
+   ========================================================================== */
+
+.logo-line-horizontal {
+
+    position: absolute;
+
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+
+    border-bottom: 2px solid #10b981;
+
+    opacity: .8;
+
+}
+
+.logo-line-diagonal {
+
+    position: absolute;
+
+    bottom: -10px;
+    right: -10px;
+
+    width: 15px;
+    height: 10px;
+
+    border-right: 2px solid #10b981;
+
+    transform: skewX(-45deg);
+
+    opacity: .6;
+
+}
+
+/* ==========================================================================
+   NAVIGATION LINKS
+   ========================================================================== */
+
+.nav-links {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+}
+
+.nav-links a {
+
+    color: #f7ebe6;
+
+    text-decoration: none;
+
+    padding: 10px 8px;
+
+    border-radius: 6px;
+
+    font-size: .95rem;
+
+    font-weight: 500;
+
+    text-transform: capitalize;
+
+    transition: color .3s ease,
+                background .3s ease;
+
+}
+
+/* Hover */
+
+.nav-links a:hover {
+
+    color: #10b981;
+
+}
+
+/* Active Link */
+
+.nav-links a.active {
+
+    color: #10b981;
+
+}
+
+/* Keyboard Accessibility */
+
+.nav-links a:focus-visible {
+
+    outline: 2px solid #10b981;
+
+    outline-offset: 4px;
+
+}
+
+/* ==========================================================================
+   TABLET
+   ========================================================================== */
+
+@media (max-width: 992px) {
+
+    nav {
+
+        padding: 14px 30px;
+
+    }
+
+    .nav-logo-img {
+
+        height: 65px;
+
+    }
+
+    .nav-links {
+
+        gap: 10px;
+
+    }
+
+}
+
+/* ==========================================================================
+   MOBILE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    nav {
+
+        padding: 12px 20px;
+
+    }
+
+    .nav-logo-img {
+
+        height: 58px;
+
+    }
+
+    /* Temporary.
+       We'll replace this with a professional hamburger menu next. */
+
+    .nav-links {
+
+        display: none;
+
+    }
+
+}
+
+/* =====================================================
+   MOBILE MENU OVERLAY
+===================================================== */
+
+.nav-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.45);
+
+    backdrop-filter:blur(4px);
+
+    -webkit-backdrop-filter:blur(4px);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:999;
+
+}
+
+.nav-overlay.active{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+/* =====================================================
+   HAMBURGER ANIMATION
+===================================================== */
+
+.menu-toggle.active span:nth-child(1){
+
+    transform:translateY(8px) rotate(45deg);
+
+}
+
+.menu-toggle.active span:nth-child(2){
+
+    opacity:0;
+
+}
+
+.menu-toggle.active span:nth-child(3){
+
+    transform:translateY(-8px) rotate(-45deg);
+
+}
+
+/* ==========================================================================
+   SMALL DEVICES
+   ========================================================================== */
+
+@media (max-width: 480px) {
+
+    nav {
+
+        padding: 10px 16px;
+
+    }
+
+    .nav-logo-img {
+
+        height: 52px;
+
+    }
+
+}
+
+/* =====================================================
+   MOBILE MENU BUTTON
+===================================================== */
+
+.menu-toggle{
+
+    display:none;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    gap:6px;
+
+    width:42px;
+
+    height:42px;
+
+    background:none;
+
+    border:none;
+
+    cursor:pointer;
+
+    z-index:1100;
+
+}
+
+.menu-toggle span{
+
+    width:28px;
+
+    height:2px;
+
+    background:#f7ebe6;
+
+    transition:.3s;
+
+}
+
+/* =====================================================
+   MOBILE NAVIGATION
+===================================================== */
+
+@media(max-width:768px){
+
+    .menu-toggle{
+
+        display:flex;
+
+    }
+
+    .nav-links{
+
+        position:fixed;
+
+        top:0;
+
+        right:-100%;
+
+        width:280px;
+
+        height:100vh;
+
+        background:#0b0503;
+
+        display:flex;
+
+        flex-direction:column;
+
+        justify-content:center;
+
+        align-items:center;
+
+        gap:35px;
+
+        transition:right .35s ease;
+
+        box-shadow:-5px 0 30px rgba(0,0,0,.4);
+
+    }
+
+    .nav-links.open{
+
+        right:0;
+
+    }
+
+    .nav-links a{
+
+        font-size:1.2rem;
+
+        margin:0;
+
+    }
+
+}
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+    position:relative;
+
+    padding:120px 24px 80px;
+
+    overflow:hidden;
+
+}
+
+/* =====================================================
+   HERO CONTENT
+===================================================== */
+
+.hero-content{
+
+    max-width:700px;
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    position:relative;
+
+    z-index:2;
+
+}
+
+/* =====================================================
+   HERO TITLE
+===================================================== */
+
+.hero-title{
+
+    font-size:clamp(1rem,2vw,2rem);
+
+    line-height:1;
+
+    letter-spacing:3px;
+
+    margin-bottom:10px;
+
+}
+
+/* =====================================================
+   HERO LOGO
+===================================================== */
+
+.hero-title-container{
+
+    max-width:550px;
+
+    width:90%;
+
+    margin-bottom:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    opacity:0;
+
+    transform:translateY(30px);
+
+}
+
+.hero-logo-img{
+
+    width:100%;
+
+    height:auto;
+
+    object-fit:contain;
+
+}
+
+/* =====================================================
+   SUBTITLE
+===================================================== */
+
+.hero-subtitle{
+
+    font-size:clamp(1rem,2vw,1.5rem);
+
+    color:#a59690;
+
+    max-width:650px;
+
+    line-height:1.7;
+
+    margin-bottom:40px;
+
+    opacity:0;
+
+}
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.learn-more-btn{
+
+    opacity:0;
+
+    background:#192a25;
+
+    border:1px solid #10b981;
+
+    color:#10b981;
+
+    padding:14px 38px;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    font-weight:600;
+
+    font-size:1rem;
+
+    transition:0.3s ease;
+
+    display:inline-flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-width:180px;
+
+}
+
+.learn-more-btn:hover{
+
+    background:#10b981;
+
+    color:#0b0503;
+
+    transform:translateY(-2px);
+
+}
+
+/* Keyboard Accessibility */
+
+.learn-more-btn:focus-visible{
+
+    outline:3px solid #ffffff;
+
+    outline-offset:5px;
+
+}
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media(max-width:992px){
+
+    .hero{
+
+        padding:100px 30px 70px;
+
+    }
+
+}
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:768px){
+
+    .hero{
+
+        padding:90px 20px 60px;
+
+    }
+
+    .hero-title{
+
+        letter-spacing:2px;
+
+    }
+
+    .hero-subtitle{
+
+        line-height:1.6;
+
+        margin-bottom:35px;
+
+    }
+
+    .learn-more-btn{
+
+        width:100%;
+
+        max-width:260px;
+
+    }
+
+}
+
+/* =====================================================
+   SMALL PHONES
+===================================================== */
+
+@media(max-width:480px){
+
+    .hero{
+
+        padding:80px 16px 50px;
+
+    }
+
+    .hero-title{
+
+        letter-spacing:1px;
+
+    }
+
+    .hero-subtitle{
+
+        font-size:1rem;
+
+    }
+
 }
 
 /* ==========================================================================
@@ -857,4 +1370,16 @@ grid-template-columns:1fr;
     font-weight:600;
     margin-bottom:20px;
     display:none;
+}
+
+html {
+scrollbar-color: #10b981 #0b0503;
+/* Track / Background Color */
+scrollbar-width: auto;
+/* Options: auto, thin */
+}
+
+html,
+body {
+    overflow-x: hidden;
 }

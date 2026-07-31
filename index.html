@@ -23,30 +23,80 @@
     </div>
 
     <div id="page-content" class="main-content">
-        <nav>
-            <div class="logo-container">
-                <div class="logo">
-                    <img src="crop.png" alt="KORACRAFT Logo" class="nav-logo-img">
-                </div>
-                <span class="logo-line-horizontal"></span>
-                <span class="logo-line-diagonal"></span>
-            </div>
-            <div class="nav-links">
-                <a href="#about">About</a>
-                <a href="#tools">Tools</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#process">Process</a>
-                <a href="#contact">Contact</a>
-            </div>
-        </nav>
 
+        <nav aria-label="Primary navigation">
+
+    <div class="logo-container">
+
+        <a href="#about" class="logo" aria-label="Go to the top of the page">
+
+            <img
+                src="crop.png"
+                alt="KORACRAFT logo"
+                class="nav-logo-img">
+
+        </a>
+
+        <span class="logo-line-horizontal"></span>
+
+        <span class="logo-line-diagonal"></span>
+
+    </div>
+
+    <button
+        class="menu-toggle"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="primary-navigation">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+    </button>
+
+    <div
+        class="nav-links"
+        id="primary-navigation">
+
+        <a href="#about">About</a>
+        <a href="#tools">Tools</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#process">Process</a>
+        <a href="#contact">Contact</a>
+
+    </div>
+
+</nav>
+   <div class="nav-overlay"></div>
         <section id="about" class="hero">
-            <div class="floating-tech-card tech-card-left"></div>
-            <div class="floating-tech-card tech-card-right"></div>
-            <h1 class="hero-title">KORACRAFT</h1>
-            <p class="hero-subtitle">Designing modern, high-performance websites that help businesses grow.</p>
-            <a href="#tools" class="learn-more-btn">learn more</a>
-        </section>
+
+    <div class="floating-tech-card tech-card-left"></div>
+
+    <div class="floating-tech-card tech-card-right"></div>
+
+    <div class="hero-content">
+
+        <h1 class="hero-title">
+            KORACRAFT
+        </h1>
+
+        <p class="hero-subtitle">
+            Designing modern, high-performance websites that help businesses grow.
+        </p>
+
+        <a
+            href="#tools"
+            class="learn-more-btn"
+            aria-label="Learn more about KoraCraft services">
+
+            Learn More
+
+        </a>
+
+    </div>
+
+</section>
 
         <section id="tools" class="section-padding">
             <h2 class="section-title">Our Technology Stack</h2>

@@ -1,14 +1,37 @@
 console.log("SCRIPT LOADED");
 // 1. Precise Track Point System Matrix
-const cursor = document.querySelector('.custom-cursor');
-document.addEventListener('mousemove', (e) => {
-    gsap.to(cursor, {
-        x: e.clientX,
-        y: e.clientY,
-        duration: 0.04,
-        ease: "power2.out"
-    });
-});
+const hasMouse = window.matchMedia("(pointer:fine)").matches;
+
+if(hasMouse){
+
+    const cursor = document.querySelector(".custom-cursor");
+
+    if(cursor){
+
+        document.addEventListener("mousemove",(e)=>{
+
+            gsap.to(cursor,{
+                x:e.clientX,
+                y:e.clientY,
+                duration:0.04,
+                ease:"power2.out"
+            });
+
+        });
+
+    }
+
+}else{
+
+    const cursor=document.querySelector(".custom-cursor");
+
+    if(cursor){
+
+        cursor.remove();
+
+    }
+
+}
 
 // 2. Hard Scroll Reset & Restoration Overrides (Forces Page to Top on Reload)
 if (history.scrollRestoration) {
@@ -167,6 +190,91 @@ gsap.to(".line-2", {
 });
 
 // ======================================================
+// Active Navigation Highlight
+// ======================================================
+
+window.addEventListener("scroll", () => {
+
+    const sections = document.querySelectorAll("section");
+    const navLinks = document.querySelectorAll(".nav-links a");
+
+    let current = "";
+
+    sections.forEach(section => {
+
+        const top = section.offsetTop - 120;
+
+        if (window.scrollY >= top) {
+            current = section.getAttribute("id");
+        }
+
+    });
+
+    navLinks.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === "#" + current) {
+            link.classList.add("active");
+        }
+
+    });
+
+});
+
+// ======================================================
+// Mobile Navigation
+// ======================================================
+
+window.addEventListener("DOMContentLoaded",()=>{
+
+    const menuButton=document.querySelector(".menu-toggle");
+
+    const navMenu=document.querySelector(".nav-links");
+
+    const overlay=document.querySelector(".nav-overlay");
+
+    if(!menuButton || !navMenu || !overlay) return;
+
+    function closeMenu(){
+
+        navMenu.classList.remove("open");
+
+        overlay.classList.remove("active");
+
+        menuButton.classList.remove("active");
+
+        menuButton.setAttribute("aria-expanded","false");
+
+        document.body.style.overflow="";
+
+    }
+
+    menuButton.addEventListener("click",()=>{
+
+        const isOpen=navMenu.classList.toggle("open");
+
+        overlay.classList.toggle("active");
+
+        menuButton.classList.toggle("active");
+
+        menuButton.setAttribute("aria-expanded",isOpen);
+
+        document.body.style.overflow=isOpen ? "hidden" : "";
+
+    });
+
+    overlay.addEventListener("click",closeMenu);
+
+    document.querySelectorAll(".nav-links a").forEach(link=>{
+
+        link.addEventListener("click",closeMenu);
+
+    });
+
+});
+
+// ======================================================
 // Contact Form Backend Integration
 // ======================================================
 
@@ -182,6 +290,11 @@ window.addEventListener("DOMContentLoaded", () => {
     contactForm.addEventListener("submit", async function (e) {
 
         e.preventDefault();
+
+        const submitButton = contactForm.querySelector("button[type='submit']");
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Sending...";
 
         const formData = {
             full_name: document.getElementById("full_name").value.trim(),
@@ -204,15 +317,19 @@ window.addEventListener("DOMContentLoaded", () => {
                 body: JSON.stringify(formData)
             });
 
+            if (!response.ok) {
+                throw new Error("Request failed");
+            }
+
             const result = await response.json();
 
             if (result.success) {
 
-    contactForm.reset();
+                contactForm.reset();
 
-    alert("✅ Thank you! Your request has been submitted successfully. We will contact you within 24 hours.");
+                alert("✅ Thank you! Your request has been submitted successfully. We will contact you within 24 hours.");
 
-        }
+            }
 
         } catch (err) {
 
@@ -220,9 +337,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
             alert("Unable to connect to the KoraCraft server.");
 
+        } finally {
+
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Request";
+
         }
 
     });
 
 });
-
