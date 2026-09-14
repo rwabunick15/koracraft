@@ -325,9 +325,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             if (result.success) {
 
-                contactForm.reset();
+               contactForm.reset();
 
-                alert("✅ Thank you! Your request has been submitted successfully. We will contact you within 24 hours.");
+                window.location.href = "thank-you.html";
 
             }
 

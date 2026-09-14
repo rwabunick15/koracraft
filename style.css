@@ -1100,15 +1100,18 @@ a.detail-value:hover {
 
 /* Button */
 
-.contact-form button {
-    background: #10b981;
-    color: #0b0503;
-    border: none;
-    border-radius: 6px;
-    padding: 18px;
-    font-size: .95rem;
-    font-weight: 700;
-    transition: background .3s;
+.contact-form button{
+    margin-top:0;
+    margin-bottom:0;
+    background:#10b981;
+    color:#0b0503;
+    border:none;
+    border-radius:6px;
+    padding:18px;
+    font-size:.95rem;
+    font-weight:700;
+    transition:background .3s;
+    cursor:none;
 }
 
 .contact-form button:hover {
@@ -1382,4 +1385,164 @@ scrollbar-width: auto;
 html,
 body {
     overflow-x: hidden;
+}
+
+/* ======================================================
+   KORACRAFT — THANK YOU PAGE
+   ====================================================== */
+
+.thank-you-page {
+    min-height: 100vh;
+    min-height: 100svh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 20px;
+    box-sizing: border-box;
+
+    background: #0b0503;
+    color: #f7ebe6;
+
+    text-align: center;
+}
+
+
+/* ======================================================
+   THANK YOU CARD
+   ====================================================== */
+
+.thank-you-card {
+    width: 100%;
+    max-width: 600px;
+
+    padding: 50px 35px;
+    box-sizing: border-box;
+
+    background: #120905;
+    border: 1px solid #24130c;
+    border-radius: 10px;
+
+    position: relative;
+}
+
+
+/* ======================================================
+   LOGO
+   ====================================================== */
+
+.thank-you-logo {
+    width: 90px;
+    height: 90px;
+
+    object-fit: contain;
+
+    display: block;
+    margin: 0 auto 20px;
+}
+
+
+/* ======================================================
+   BRAND LABEL
+   ====================================================== */
+
+.thank-you-label {
+    margin: 0 0 15px;
+
+    color: #10b981;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+
+    letter-spacing: 4px;
+}
+
+
+/* ======================================================
+   MAIN HEADING
+   ====================================================== */
+
+.thank-you-card h1 {
+    margin: 0 0 20px;
+
+    color: #f7ebe6;
+
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
+    line-height: 1;
+}
+
+
+/* ======================================================
+   MAIN MESSAGE
+   ====================================================== */
+
+.thank-you-message {
+    max-width: 500px;
+
+    margin: 0 auto 12px;
+
+    color: #f7ebe6;
+
+    font-size: 1.15rem;
+    line-height: 1.6;
+}
+
+
+/* ======================================================
+   SECONDARY MESSAGE
+   ====================================================== */
+
+.thank-you-submessage {
+    max-width: 500px;
+
+    margin: 0 auto 35px;
+
+    color: #a59690;
+
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+
+/* ======================================================
+   RETURN BUTTON
+   ====================================================== */
+
+.thank-you-button {
+    display: inline-block;
+
+    padding: 14px 30px;
+
+    background: #10b981;
+    color: #0b0503;
+
+    border: 1px solid #10b981;
+    border-radius: 6px;
+
+    text-decoration: none;
+
+    font-size: 0.95rem;
+    font-weight: 700;
+
+    transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        transform 0.2s ease;
+}
+
+
+/* Mouse interaction */
+
+.thank-you-button:hover {
+    background: #059669;
+
+    transform: translateY(-2px);
+}
+
+
+/* Keyboard accessibility */
+
+.thank-you-button:focus-visible {
+    outline: 3px solid #f7ebe6;
+    outline-offset: 4px;
 }

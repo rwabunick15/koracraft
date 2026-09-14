@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You | KoraCraft</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" sizes="32x32" href="crop.png?v=2">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0b0503; color: #f7ebe6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 24px;
+        }
+        .box { max-width: 480px; animation: up .7s ease both; }
+        @keyframes up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+        .check { width: 76px; height: 76px; margin: 0 auto 28px; }
+        .check circle { stroke: #10b981; stroke-width: 2; fill: none; stroke-dasharray: 290; stroke-dashoffset: 290; animation: draw .9s ease forwards; }
+        .check path { stroke: #10b981; stroke-width: 5; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 80; stroke-dashoffset: 80; animation: draw .4s ease .7s forwards; }
+        @keyframes draw { to { stroke-dashoffset: 0; } }
+        h1 { font-size: clamp(38px, 8vw, 60px); font-weight: 700; letter-spacing: -1px; margin-bottom: 14px; }
+        h1 span { color: #10b981; }
+        p { color: #a8928a; font-size: 17px; line-height: 1.7; margin-bottom: 34px; }
+        p strong { color: #f7ebe6; font-weight: 600; }
+        .btn { display: inline-block; border: 1px solid #10b981; color: #10b981; text-decoration: none;
+            font-weight: 600; font-size: 15px; padding: 14px 40px; border-radius: 100px; transition: all .25s ease; }
+        .btn:hover { background: #10b981; color: #0b0503; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <svg class="check" viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="46"/><path d="M30 51 L45 66 L71 37"/>
+        </svg>
+        <h1>Thank you<span>.</span></h1>
+        <p id="msg">Your request has been received — we&apos;ll be in touch within <strong>24 hours</strong>.</p>
+        <a class="btn" href="/">Back to home</a>
+    </div>
+    <script>
+        var name = (new URLSearchParams(window.location.search).get('name') || '').trim().split(' ')[0];
+        if (name) document.getElementById('msg').innerHTML = 'Thanks <strong>' + name.replace(/[<>&]/g, '') + '</strong>! Your request has been received — we&apos;ll be in touch within <strong>24 hours</strong>.';
+    </script>
+</body>
+</html>
