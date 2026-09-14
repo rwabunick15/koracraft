@@ -127,61 +127,139 @@ function renderTable(){
 
     });
 
-    filtered.forEach(request=>{
+    // ======================================
+// Request Details Modal
+// ======================================
 
-        const row=document.createElement("tr");
+const requestModal = document.getElementById("requestModal");
+const closeModal = document.getElementById("closeModal");
 
-        row.innerHTML=`
+function openRequest(request) {
 
-            <td>${request.id}</td>
+    document.getElementById("modalRequestId").textContent =
+        `Request #${request.id}`;
 
-            <td>${request.full_name}</td>
+    document.getElementById("modalName").textContent =
+        request.full_name || "N/A";
 
-            <td>${request.email}</td>
+    document.getElementById("modalCompany").textContent =
+        request.company_name || "N/A";
 
-            <td>${request.website_type}</td>
+    document.getElementById("modalEmail").textContent =
+        request.email || "N/A";
 
-            <td>
+    document.getElementById("modalPhone").textContent =
+        request.phone || "N/A";
 
-                <span class="status">
+    document.getElementById("modalWebsite").textContent =
+        request.website_type || "N/A";
 
-                    ${request.status}
+    document.getElementById("modalBudget").textContent =
+        request.budget || "N/A";
 
-                </span>
+    document.getElementById("modalTimeline").textContent =
+        request.timeline || "N/A";
 
-            </td>
+    document.getElementById("modalStatus").textContent =
+        request.status || "New";
 
-            <td>
+    document.getElementById("modalDescription").textContent =
+        request.project_description || "No description provided.";
 
-                ${new Date(request.created_at)
-                    .toLocaleDateString()}
+    document.getElementById("modalDate").textContent =
+        request.created_at
+            ? new Date(request.created_at).toLocaleString()
+            : "N/A";
 
-            </td>
+    requestModal.classList.add("active");
+}
 
-            <td>
 
-       <button
-          class="delete-btn"
-          data-id="${request.id}">
+// Close button
 
-          Delete
+closeModal.addEventListener("click", () => {
+    requestModal.classList.remove("active");
+});
 
-       </button>
 
-     </td>
+// Click outside modal to close
 
-        `;
+requestModal.addEventListener("click", (e) => {
 
-        table.appendChild(row);
-
-         row.querySelector(".delete-btn").addEventListener("click", () => {
-
-    deleteRequest(request.id);
+    if (e.target === requestModal) {
+        requestModal.classList.remove("active");
+    }
 
 });
 
-}
-)}
+
+// ESC key closes modal
+
+document.addEventListener("keydown", (e) => {
+
+    if (e.key === "Escape") {
+        requestModal.classList.remove("active");
+    }
+
+});
+
+filtered.forEach(request => {
+
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${request.id}</td>
+
+        <td>${request.full_name || "N/A"}</td>
+
+        <td>${request.email || "N/A"}</td>
+
+        <td>${request.website_type || "N/A"}</td>
+
+        <td>
+            <span class="status">
+                ${request.status || "New"}
+            </span>
+        </td>
+
+        <td>
+            ${new Date(request.created_at).toLocaleDateString()}
+        </td>
+
+        <td>
+            <button
+                class="delete-btn"
+                data-id="${request.id}">
+                Delete
+            </button>
+        </td>
+    `;
+
+    // ======================================
+    // Whole row opens request
+    // ======================================
+
+    row.addEventListener("click", () => {
+        openRequest(request);
+    });
+
+    // ======================================
+    // Delete button
+    // ======================================
+
+    row.querySelector(".delete-btn").addEventListener("click", (e) => {
+
+        // Prevent the row click from opening the request
+        e.stopPropagation();
+
+        deleteRequest(request.id);
+
+    });
+
+    table.appendChild(row);
+
+});
+
 
 // ======================================
 // Delete
@@ -274,3 +352,4 @@ statusFilter.addEventListener(
     await loadRequests();
 
 })();
+};

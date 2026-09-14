@@ -23,6 +23,51 @@ function requireAdmin(req, res, next) {
 }
 
 // ======================================
+// ADMIN - GET SINGLE REQUEST
+// ======================================
+
+router.get("/:id", requireAdmin, (req, res) => {
+
+    const { id } = req.params;
+
+    const sql = `
+        SELECT *
+        FROM website_requests
+        WHERE id = ?
+    `;
+
+    db.get(sql, [id], (err, row) => {
+
+        if (err) {
+
+            console.error(err);
+
+            return res.status(500).json({
+                success: false,
+                message: "Failed to retrieve request."
+            });
+
+        }
+
+        if (!row) {
+
+            return res.status(404).json({
+                success: false,
+                message: "Request not found."
+            });
+
+        }
+
+        res.json({
+            success: true,
+            request: row
+        });
+
+    });
+
+});
+
+// ======================================
 // PUBLIC - Submit Website Request
 // POST /api/request
 // ======================================
