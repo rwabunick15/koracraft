@@ -16,33 +16,22 @@ let requests = [];
 
 async function checkSession() {
 
-    try {
-
-        const response = await fetch(
-            "https://koracraft-backend.onrender.com/api/auth/check",
-            {
-                credentials: "include"
-            }
-        );
-
-        const result = await response.json();
-
-        if (!result.loggedIn) {
-            window.location.href = "login.html";
-            return false;
+    const response = await fetch(
+        "https://koracraft-backend.onrender.com/api/auth/check",
+        {
+            credentials: "include"
         }
+    );
 
-        return true;
+    const result = await response.json();
 
-    } catch (err) {
+    if (!result.loggedIn) {
 
-        console.error("Session check failed:", err);
         window.location.href = "login.html";
-        return false;
 
     }
-}
 
+}
 
 // ======================================
 // Load Requests
@@ -55,93 +44,96 @@ async function loadRequests() {
         const response = await fetch(
             "https://koracraft-backend.onrender.com/api/request",
             {
-                method: "GET",
-                credentials: "include",
-                headers: {
-                    "Accept": "application/json"
-                }
+                credentials: "include"
             }
         );
 
-        if (response.status === 401) {
-
-            window.location.href = "login.html";
-            return;
-
-        }
-
         if (!response.ok) {
 
-            throw new Error(
-                `Failed to load requests. Status: ${response.status}`
-            );
+            alert("Failed to load requests.");
+
+            return;
 
         }
 
         const result = await response.json();
 
-        console.log("Requests received:", result);
-
-        requests = Array.isArray(result.requests)
-            ? result.requests
-            : [];
+        requests = result.requests;
 
         updateStatistics();
+
         renderTable();
 
-    } catch (err) {
+    }
 
-        console.error("Load requests error:", err);
+    catch(err){
 
-        table.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    Unable to load requests.
-                </td>
-            </tr>
-        `;
+        console.error(err);
 
     }
 
 }
 
-
 // ======================================
 // Statistics
 // ======================================
 
-function updateStatistics() {
+function updateStatistics(){
 
     totalRequests.textContent = requests.length;
 
     newRequests.textContent =
-        requests.filter(
-            r => (r.status || "New") === "New"
-        ).length;
+        requests.filter(r=>r.status==="New").length;
 
     contactedRequests.textContent =
-        requests.filter(
-            r => r.status === "Contacted"
-        ).length;
+        requests.filter(r=>r.status==="Contacted").length;
 
     completedRequests.textContent =
-        requests.filter(
-            r => r.status === "Completed"
-        ).length;
+        requests.filter(r=>r.status==="Completed").length;
 
 }
 
-
 // ======================================
+// Render Table
+// ======================================
+
+function renderTable(){
+
+    table.innerHTML="";
+
+    const search =
+        searchInput.value.toLowerCase();
+
+    const status =
+        statusFilter.value;
+
+    const filtered = requests.filter(r=>{
+
+        const matchesSearch =
+
+            (r.full_name || "").toLowerCase().includes(search) ||
+
+            (r.email || "").toLowerCase().includes(search) ||
+
+            (r.website_type || "").toLowerCase().includes(search);
+
+        const matchesStatus =
+
+            status==="All" ||
+
+            r.status===status;
+
+        return matchesSearch && matchesStatus;
+
+    });
+    };
+
+    // ======================================
 // Request Details Modal
 // ======================================
 
-const requestModal =
-    document.getElementById("requestModal");
-
-const closeModal =
-    document.getElementById("closeModal");
-
+const requestModal = document.getElementById("requestModal");
+const closeModal = document.getElementById("closeModal");
 
 function openRequest(request) {
 
@@ -173,8 +165,7 @@ function openRequest(request) {
         request.status || "New";
 
     document.getElementById("modalDescription").textContent =
-        request.project_description ||
-        "No description provided.";
+        request.project_description || "No description provided.";
 
     document.getElementById("modalDate").textContent =
         request.created_at
@@ -182,346 +173,182 @@ function openRequest(request) {
             : "N/A";
 
     requestModal.classList.add("active");
-
 }
 
 
-// ======================================
-// Close Modal
-// ======================================
+// Close button
 
-if (closeModal) {
+closeModal.addEventListener("click", () => {
+    requestModal.classList.remove("active");
+});
 
-    closeModal.addEventListener("click", () => {
 
+// Click outside modal to close
+
+requestModal.addEventListener("click", (e) => {
+
+    if (e.target === requestModal) {
         requestModal.classList.remove("active");
-
-    });
-
-}
-
-
-// ======================================
-// Click Outside Modal
-// ======================================
-
-if (requestModal) {
-
-    requestModal.addEventListener("click", (e) => {
-
-        if (e.target === requestModal) {
-
-            requestModal.classList.remove("active");
-
-        }
-
-    });
-
-}
-
-
-// ======================================
-// ESC Key Closes Modal
-// ======================================
-
-document.addEventListener("keydown", (e) => {
-
-    if (
-        e.key === "Escape" &&
-        requestModal
-    ) {
-
-        requestModal.classList.remove("active");
-
     }
 
 });
 
 
-// ======================================
-// Render Table
-// ======================================
+// ESC key closes modal
 
-function renderTable() {
+document.addEventListener("keydown", (e) => {
 
-    table.innerHTML = "";
+    if (e.key === "Escape") {
+        requestModal.classList.remove("active");
+    }
 
-    const search =
-        (searchInput.value || "").toLowerCase().trim();
+});
 
-    const status =
-        statusFilter.value;
+filtered.forEach(request => {
 
-    const filtered = requests.filter(request => {
+    const row = document.createElement("tr");
 
-        const matchesSearch =
+    row.innerHTML = `
+        <td>${request.id}</td>
 
-            (request.full_name || "")
-                .toLowerCase()
-                .includes(search)
+        <td>${request.full_name || "N/A"}</td>
 
-            ||
+        <td>${request.email || "N/A"}</td>
 
-            (request.email || "")
-                .toLowerCase()
-                .includes(search)
+        <td>${request.website_type || "N/A"}</td>
 
-            ||
+        <td>
+            <span class="status">
+                ${request.status || "New"}
+            </span>
+        </td>
 
-            (request.website_type || "")
-                .toLowerCase()
-                .includes(search);
+        <td>
+            ${new Date(request.created_at).toLocaleDateString()}
+        </td>
 
-        const matchesStatus =
+        <td>
+            <button
+                class="delete-btn"
+                data-id="${request.id}">
+                Delete
+            </button>
+        </td>
+    `;
 
-            status === "All" ||
+    // ======================================
+    // Whole row opens request
+    // ======================================
 
-            request.status === status;
+    row.addEventListener("click", () => {
+        openRequest(request);
+    });
 
-        return matchesSearch && matchesStatus;
+    // ======================================
+    // Delete button
+    // ======================================
+
+    row.querySelector(".delete-btn").addEventListener("click", (e) => {
+
+        // Prevent the row click from opening the request
+        e.stopPropagation();
+
+        deleteRequest(request.id);
 
     });
 
+    table.appendChild(row);
 
-    // ======================================
-    // No Requests
-    // ======================================
-
-    if (filtered.length === 0) {
-
-        table.innerHTML = `
-            <tr>
-                <td colspan="7">
-                    No requests found.
-                </td>
-            </tr>
-        `;
-
-        return;
-
-    }
-
-
-    // ======================================
-    // Create Rows
-    // ======================================
-
-    filtered.forEach(request => {
-
-        const row =
-            document.createElement("tr");
-
-        row.innerHTML = `
-            <td>${request.id}</td>
-
-            <td>
-                ${request.full_name || "N/A"}
-            </td>
-
-            <td>
-                ${request.email || "N/A"}
-            </td>
-
-            <td>
-                ${request.website_type || "N/A"}
-            </td>
-
-            <td>
-                <span class="status">
-                    ${request.status || "New"}
-                </span>
-            </td>
-
-            <td>
-                ${
-                    request.created_at
-                        ? new Date(
-                            request.created_at
-                          ).toLocaleDateString()
-                        : "N/A"
-                }
-            </td>
-
-            <td>
-                <button
-                    class="delete-btn"
-                    data-id="${request.id}">
-                    Delete
-                </button>
-            </td>
-        `;
-
-
-        // ======================================
-        // Whole Row Opens Request
-        // ======================================
-
-        row.addEventListener("click", () => {
-
-            openRequest(request);
-
-        });
-
-
-        // ======================================
-        // Delete Button
-        // ======================================
-
-        const deleteButton =
-            row.querySelector(".delete-btn");
-
-        deleteButton.addEventListener(
-            "click",
-            (e) => {
-
-                e.stopPropagation();
-
-                deleteRequest(request.id);
-
-            }
-        );
-
-
-        table.appendChild(row);
-
-    });
-
-}
+});
 
 
 // ======================================
-// Delete Request
+// Delete
 // ======================================
 
-async function deleteRequest(id) {
+async function deleteRequest(id){
 
-    if (!confirm("Delete this request?")) {
-        return;
-    }
+    if(!confirm("Delete this request?")) return;
 
-    try {
+    const response = await fetch(
 
-        const response = await fetch(
+        `https://koracraft-backend.onrender.com/api/request/${id}`,
 
-            `https://koracraft-backend.onrender.com/api/request/${id}`,
+        {
 
-            {
-                method: "DELETE",
-                credentials: "include"
-            }
+            method:"DELETE",
 
-        );
-
-
-        if (response.status === 401) {
-
-            window.location.href = "login.html";
-            return;
+            credentials:"include"
 
         }
 
+    );
 
-        if (!response.ok) {
+    if(response.ok){
 
-            throw new Error(
-                `Delete failed: ${response.status}`
-            );
-
-        }
-
-
-        await loadRequests();
-
-    } catch (err) {
-
-        console.error("Delete error:", err);
-
-        alert("Unable to delete this request.");
+        loadRequests();
 
     }
 
 }
-
 
 // ======================================
 // Logout
 // ======================================
 
-const logoutBtn =
-    document.getElementById("logoutBtn");
+document
+.getElementById("logoutBtn")
+.addEventListener("click",async()=>{
 
-if (logoutBtn) {
+    await fetch(
 
-    logoutBtn.addEventListener(
-        "click",
-        async () => {
+        "https://koracraft-backend.onrender.com/api/auth/logout",
 
-            try {
+        {
 
-                await fetch(
-                    "https://koracraft-backend.onrender.com/api/auth/logout",
-                    {
-                        method: "POST",
-                        credentials: "include"
-                    }
-                );
+            method:"POST",
 
-            } catch (err) {
-
-                console.error(
-                    "Logout error:",
-                    err
-                );
-
-            }
-
-            window.location.href = "login.html";
+            credentials:"include"
 
         }
+
     );
 
-}
+    window.location.href="login.html";
 
+});
 
 // ======================================
 // Search
 // ======================================
 
-if (searchInput) {
+searchInput.addEventListener(
 
-    searchInput.addEventListener(
-        "input",
-        renderTable
-    );
+    "input",
 
-}
+    renderTable
 
+);
 
 // ======================================
-// Status Filter
+// Filter
 // ======================================
 
-if (statusFilter) {
+statusFilter.addEventListener(
 
-    statusFilter.addEventListener(
-        "change",
-        renderTable
-    );
+    "change",
 
-}
+    renderTable
 
+);
 
 // ======================================
-// Start Dashboard
+// Start
 // ======================================
 
-(async () => {
+(async()=>{
 
-    const loggedIn = await checkSession();
-
-    if (!loggedIn) {
-        return;
-    }
+    await checkSession();
 
     await loadRequests();
 
