@@ -126,7 +126,6 @@ function renderTable(){
         return matchesSearch && matchesStatus;
 
     });
-    };
 
     // ======================================
 // Request Details Modal
@@ -353,3 +352,5 @@ statusFilter.addEventListener(
     await loadRequests();
 
 })();
+
+}

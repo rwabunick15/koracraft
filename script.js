@@ -41,7 +41,7 @@ if (history.scrollRestoration) {
 window.scrollTo(0, 0);
 
 // 3. Multilingual Initial Cinematic Flow Sequence
-const greetings = ["Hello", "Muraho", "Habari", "Bonjour", "你好"];
+const greetings = ["Hello", "Muraho", "Habari", "Bonjour", "你好", "Namaste"];
 const introText = document.getElementById('intro-greeting');
 const introTl = gsap.timeline();
 
