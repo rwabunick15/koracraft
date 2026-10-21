@@ -1,3 +1,6 @@
+
+const API = "https://koracraft-backend.onrender.com";
+
 const table = document.getElementById("requestsTable");
 
 const totalRequests = document.getElementById("totalRequests");
@@ -8,6 +11,9 @@ const completedRequests = document.getElementById("completedRequests");
 const searchInput = document.getElementById("searchInput");
 const statusFilter = document.getElementById("statusFilter");
 
+const requestModal = document.getElementById("requestModal");
+const closeModal = document.getElementById("closeModal");
+
 let requests = [];
 
 // ======================================
@@ -15,22 +21,28 @@ let requests = [];
 // ======================================
 
 async function checkSession() {
-
-    const response = await fetch(
-        "https://koracraft-backend.onrender.com/api/auth/check",
-        {
+    try {
+        const response = await fetch(`${API}/api/auth/check`, {
             credentials: "include"
+        });
+
+        if (!response.ok) {
+            throw new Error(`Session check failed: HTTP ${response.status}`);
         }
-    );
 
-    const result = await response.json();
+        const result = await response.json();
 
-    if (!result.loggedIn) {
+        if (!result.loggedIn) {
+            window.location.href = "login.html";
+            return false;
+        }
 
-        window.location.href = "login.html";
-
+        return true;
+    } catch (err) {
+        console.error("Session check error:", err);
+        alert("Could not verify your login session. Check the Console.");
+        return false;
     }
-
 }
 
 // ======================================
@@ -38,104 +50,125 @@ async function checkSession() {
 // ======================================
 
 async function loadRequests() {
-
     try {
-
-        const response = await fetch(
-            "https://koracraft-backend.onrender.com/api/request",
-            {
-                credentials: "include"
-            }
-        );
+        const response = await fetch(`${API}/api/request`, {
+            credentials: "include"
+        });
 
         if (!response.ok) {
-
-            alert("Failed to load requests.");
-
-            return;
-
+            throw new Error(`Failed to load requests: HTTP ${response.status}`);
         }
 
         const result = await response.json();
 
+        if (!result.success || !Array.isArray(result.requests)) {
+            throw new Error("The API did not return a valid requests array.");
+        }
+
         requests = result.requests;
 
         updateStatistics();
-
         renderTable();
 
+        console.log(`Loaded ${requests.length} requests from the API.`);
+    } catch (err) {
+        console.error("Load requests error:", err);
+        alert("Could not load requests. Open F12 > Console for details.");
     }
-
-    catch(err){
-
-        console.error(err);
-
-    }
-
 }
 
 // ======================================
 // Statistics
 // ======================================
 
-function updateStatistics(){
-
+function updateStatistics() {
     totalRequests.textContent = requests.length;
 
     newRequests.textContent =
-        requests.filter(r=>r.status==="New").length;
+        requests.filter(r => (r.status || "New") === "New").length;
 
     contactedRequests.textContent =
-        requests.filter(r=>r.status==="Contacted").length;
+        requests.filter(r => r.status === "Contacted").length;
 
     completedRequests.textContent =
-        requests.filter(r=>r.status==="Completed").length;
-
+        requests.filter(r => r.status === "Completed").length;
 }
 
 // ======================================
 // Render Table
 // ======================================
 
-function renderTable(){
+function renderTable() {
+    table.innerHTML = "";
 
-    table.innerHTML="";
+    const search = searchInput.value.toLowerCase().trim();
+    const status = statusFilter.value;
 
-    const search =
-        searchInput.value.toLowerCase();
-
-    const status =
-        statusFilter.value;
-
-    const filtered = requests.filter(r=>{
-
+    const filtered = requests.filter(r => {
         const matchesSearch =
-
             (r.full_name || "").toLowerCase().includes(search) ||
-
             (r.email || "").toLowerCase().includes(search) ||
-
             (r.website_type || "").toLowerCase().includes(search);
 
         const matchesStatus =
-
-            status==="All" ||
-
-            r.status===status;
+            status === "All" ||
+            (status === "New" ? (r.status || "New") === "New" : r.status === status);
 
         return matchesSearch && matchesStatus;
-
     });
 
-    // ======================================
+    if (filtered.length === 0) {
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+
+        cell.colSpan = 7;
+        cell.textContent = requests.length === 0
+            ? "No requests were returned by the API."
+            : "No requests match your search or selected status.";
+
+        row.appendChild(cell);
+        table.appendChild(row);
+        return;
+    }
+
+    filtered.forEach(request => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${request.id}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><span class="status"></span></td>
+            <td></td>
+            <td><button class="delete-btn" data-id="${request.id}">Delete</button></td>
+        `;
+
+        // Use textContent for customer-provided values.
+        row.cells[1].textContent = request.full_name || "N/A";
+        row.cells[2].textContent = request.email || "N/A";
+        row.cells[3].textContent = request.website_type || "N/A";
+        row.cells[4].firstElementChild.textContent = request.status || "New";
+        row.cells[5].textContent = request.created_at
+            ? new Date(request.created_at).toLocaleDateString()
+            : "N/A";
+
+        row.addEventListener("click", () => openRequest(request));
+
+        row.querySelector(".delete-btn").addEventListener("click", event => {
+            event.stopPropagation();
+            deleteRequest(request.id);
+        });
+
+        table.appendChild(row);
+    });
+}
+
+// ======================================
 // Request Details Modal
 // ======================================
 
-const requestModal = document.getElementById("requestModal");
-const closeModal = document.getElementById("closeModal");
-
 function openRequest(request) {
-
     document.getElementById("modalRequestId").textContent =
         `Request #${request.id}`;
 
@@ -174,183 +207,78 @@ function openRequest(request) {
     requestModal.classList.add("active");
 }
 
-
-// Close button
-
 closeModal.addEventListener("click", () => {
     requestModal.classList.remove("active");
 });
 
-
-// Click outside modal to close
-
-requestModal.addEventListener("click", (e) => {
-
-    if (e.target === requestModal) {
+requestModal.addEventListener("click", event => {
+    if (event.target === requestModal) {
         requestModal.classList.remove("active");
     }
-
 });
 
-
-// ESC key closes modal
-
-document.addEventListener("keydown", (e) => {
-
-    if (e.key === "Escape") {
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
         requestModal.classList.remove("active");
     }
-
 });
 
-filtered.forEach(request => {
-
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-        <td>${request.id}</td>
-
-        <td>${request.full_name || "N/A"}</td>
-
-        <td>${request.email || "N/A"}</td>
-
-        <td>${request.website_type || "N/A"}</td>
-
-        <td>
-            <span class="status">
-                ${request.status || "New"}
-            </span>
-        </td>
-
-        <td>
-            ${new Date(request.created_at).toLocaleDateString()}
-        </td>
-
-        <td>
-            <button
-                class="delete-btn"
-                data-id="${request.id}">
-                Delete
-            </button>
-        </td>
-    `;
-
-    // ======================================
-    // Whole row opens request
-    // ======================================
-
-    row.addEventListener("click", () => {
-        openRequest(request);
-    });
-
-    // ======================================
-    // Delete button
-    // ======================================
-
-    row.querySelector(".delete-btn").addEventListener("click", (e) => {
-
-        // Prevent the row click from opening the request
-        e.stopPropagation();
-
-        deleteRequest(request.id);
-
-    });
-
-    table.appendChild(row);
-
-});
-
-
 // ======================================
-// Delete
+// Delete Request
 // ======================================
 
-async function deleteRequest(id){
+async function deleteRequest(id) {
+    if (!confirm("Delete this request?")) return;
 
-    if(!confirm("Delete this request?")) return;
+    try {
+        const response = await fetch(`${API}/api/request/${id}`, {
+            method: "DELETE",
+            credentials: "include"
+        });
 
-    const response = await fetch(
-
-        `https://koracraft-backend.onrender.com/api/request/${id}`,
-
-        {
-
-            method:"DELETE",
-
-            credentials:"include"
-
+        if (!response.ok) {
+            throw new Error(`Delete failed: HTTP ${response.status}`);
         }
 
-    );
-
-    if(response.ok){
-
-        loadRequests();
-
+        await loadRequests();
+    } catch (err) {
+        console.error("Delete request error:", err);
+        alert("Could not delete the request. Check the Console.");
     }
-
 }
 
 // ======================================
 // Logout
 // ======================================
 
-document
-.getElementById("logoutBtn")
-.addEventListener("click",async()=>{
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+    try {
+        await fetch(`${API}/api/auth/logout`, {
+            method: "POST",
+            credentials: "include"
+        });
+    } catch (err) {
+        console.error("Logout error:", err);
+    }
 
-    await fetch(
-
-        "https://koracraft-backend.onrender.com/api/auth/logout",
-
-        {
-
-            method:"POST",
-
-            credentials:"include"
-
-        }
-
-    );
-
-    window.location.href="login.html";
-
+    window.location.href = "login.html";
 });
 
 // ======================================
-// Search
+// Search and Filter
 // ======================================
 
-searchInput.addEventListener(
-
-    "input",
-
-    renderTable
-
-);
+searchInput.addEventListener("input", renderTable);
+statusFilter.addEventListener("change", renderTable);
 
 // ======================================
-// Filter
+// Start Dashboard
 // ======================================
 
-statusFilter.addEventListener(
+(async () => {
+    const loggedIn = await checkSession();
 
-    "change",
-
-    renderTable
-
-);
-
-// ======================================
-// Start
-// ======================================
-
-(async()=>{
-
-    await checkSession();
-
-    await loadRequests();
-
+    if (loggedIn) {
+        await loadRequests();
+    }
 })();
-
-}
